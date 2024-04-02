@@ -24,7 +24,6 @@ public class ProjectSecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-
         http.csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/myAccount", "myBalance", "myLoans", "myCards").authenticated()   // 인증 필요
@@ -35,61 +34,9 @@ public class ProjectSecurityConfig {
 
     }
 
-    /*@Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-
-        *//*
-     * Approach 1 where we use withDegaultPasswordEncoder() method
-     * while creating the user details
-     * *//*
-
-     *//*UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("12345")
-                .authorities("admin")
-                .build();
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("12345")
-                .authorities("read")
-                .build();
-        return new InMemoryUserDetailsManager(admin, user);*//*
-
-     *//*
-     * Approach 2 where we use NoOpPasswordEncoder Bean
-     * while creating the user details
-     * *//*
-
-        UserDetails admin = User.withUsername("admin")
-                .password("12345")
-                .authorities("admin")
-                .build();
-        UserDetails user = User.withUsername("user")
-                .password("12345")
-                .authorities("read")
-                .build();
-        return new InMemoryUserDetailsManager(admin, user);
-
-    }*/
-
-    /*@Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }*/
-
-    /*
-     * NoOpPasswordEncoder is not recommended for production usage.
-     * Use onlu for non-prod.
-     *
-     * @return PasswordEncoder
-     * */
-
-    /*
-     * 비밀번호를 어떻게 저장하였는지 알려주기 위해 항상 필요함.
-     * */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
 }
